@@ -11,6 +11,7 @@ class SearchViewController: UIViewController {
     
     // MARK: - Instance Variables
     var searchResults = [SearchResult]()
+    var hasSearched = false
     
     // MARK: - Outlets
     @IBOutlet weak var searchBar: UISearchBar!
@@ -38,7 +39,8 @@ extension SearchViewController: UISearchBarDelegate {
                 searchResult.artistName = searchBar.text!
                 searchResults.append(searchResult)
             }}
-        tableView.reloadData()
+         hasSearched = true      // Add this line
+         tableView.reloadData()
     }
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
@@ -52,11 +54,13 @@ extension SearchViewController: UITableViewDelegate,
       _ tableView: UITableView,
       numberOfRowsInSection section: Int
     ) -> Int {
-      if searchResults.count == 0 {
-          return 1
-      } else {
-        return searchResults.count
-      }
+        if !hasSearched {
+            return 0
+          } else if searchResults.count == 0 {
+            return 1
+          } else {
+            return searchResults.count
+          }
     }
     
     func tableView(
